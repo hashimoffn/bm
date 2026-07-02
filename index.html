@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zirvə Məktəbi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16283D;
+    --ink-soft:#2C4257;
+    --parchment:#F7F3E8;
+    --parchment-dim:#EFE9D8;
+    --gold:#C89B3C;
+    --gold-soft:#E4C878;
+    --sage:#5D7F63;
+    --coral:#C1613F;
+    --line:rgba(22,40,61,0.14);
+    --radius:2px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--parchment);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    line-height:1.1;
+    color:var(--ink);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--sage);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px;height:1px;
+    background:var(--sage);
+    display:inline-block;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  section{position:relative;}
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(247,243,232,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 32px;max-width:1180px;margin:0 auto;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+    font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;
+  }
+  .seal{
+    width:38px;height:38px;border-radius:50%;
+    border:1.5px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-weight:600;font-size:0.85rem;
+    color:var(--ink);flex-shrink:0;
+    position:relative;
+  }
+  .seal::after{
+    content:"";position:absolute;inset:4px;
+    border:1px solid var(--gold);border-radius:50%;
+  }
+  nav ul{list-style:none;display:flex;gap:34px;}
+  nav ul a{
+    font-size:0.92rem;font-weight:500;
+    position:relative;padding-bottom:4px;
+  }
+  nav ul a::after{
+    content:"";position:absolute;left:0;bottom:0;
+    width:0;height:1.5px;background:var(--gold);
+    transition:width .25s ease;
+  }
+  nav ul a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--ink);color:var(--parchment);
+    padding:10px 22px;font-size:0.85rem;font-weight:600;
+    border-radius:var(--radius);
+    border:1px solid var(--ink);
+    transition:background .2s ease, color .2s ease;
+  }
+  .nav-cta:hover{background:transparent;color:var(--ink);}
+  .menu-btn{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--ink);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:88px 0 60px;
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:0.72fr 1.28fr;gap:56px;align-items:center;
+  }
+  .hero-copy h1{
+    font-size:clamp(2.4rem,4.6vw,3.6rem);
+    margin:18px 0 22px;
+    letter-spacing:-0.01em;
+  }
+  .hero-copy h1 em{
+    font-style:italic;color:var(--sage);
+  }
+  .hero-copy p{
+    font-size:1.08rem;color:var(--ink-soft);max-width:480px;margin-bottom:32px;
+  }
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+  .btn-primary{
+    background:var(--gold);color:var(--ink);
+    padding:14px 28px;font-weight:600;font-size:0.95rem;
+    border-radius:var(--radius);
+    display:inline-block;
+    border:1px solid var(--gold);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(200,155,60,0.35);}
+  .btn-ghost{
+    padding:14px 6px;font-weight:600;font-size:0.95rem;
+    border-bottom:1.5px solid var(--ink);
+  }
+
+  /* Timetable-style signature graphic */
+  .schedule-card{
+    background:var(--ink);color:var(--parchment);
+    border-radius:var(--radius);
+    padding:36px 40px 34px;
+    font-family:'JetBrains Mono',monospace;
+    position:relative;
+    box-shadow:14px 14px 0 var(--gold-soft);
+  }
+  .schedule-card .sc-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid rgba(247,243,232,0.25);
+    padding-bottom:16px;margin-bottom:26px;
+  }
+  .schedule-card .sc-head span:first-child{
+    font-family:'Fraunces',serif;font-size:1.1rem;font-style:italic;font-weight:500;
+  }
+  .schedule-card .sc-head span:last-child{font-size:0.7rem;color:var(--gold-soft);}
+  .sc-row{
+    display:grid;grid-template-columns:56px 1fr auto;gap:14px;
+    padding:10px 0;font-size:0.82rem;
+    border-bottom:1px dashed rgba(247,243,232,0.14);
+    align-items:center;
+  }
+  .sc-row:last-child{border-bottom:none;}
+  .sc-row .t{color:var(--gold-soft);}
+  .sc-row .r{color:rgba(247,243,232,0.55);font-size:0.72rem;}
+
+  .sc-picker{
+    display:flex;flex-wrap:wrap;gap:6px;
+    margin-bottom:18px;
+  }
+  .sc-label{
+    font-family:'JetBrains Mono',monospace;font-size:0.68rem;
+    letter-spacing:0.1em;text-transform:uppercase;
+    color:rgba(247,243,232,0.4);margin-bottom:10px;
+  }
+  .sc-chip{
+    width:32px;height:32px;
+    border:1px solid rgba(247,243,232,0.25);
+    background:transparent;color:rgba(247,243,232,0.75);
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;
+    border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .sc-chip:hover{border-color:var(--gold-soft);color:var(--parchment);}
+  .sc-chip[aria-selected="true"]{
+    background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700;
+  }
+  .sc-daypicker{
+    display:flex;flex-wrap:wrap;gap:8px;
+    margin-bottom:24px;
+  }
+  .sc-day{
+    padding:8px 16px;
+    border:1px solid rgba(247,243,232,0.25);
+    background:transparent;color:rgba(247,243,232,0.75);
+    font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:500;
+    border-radius:999px;cursor:pointer;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .sc-day:hover{border-color:var(--gold-soft);color:var(--parchment);}
+  .sc-day[aria-selected="true"]{
+    background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700;
+  }
+  .sc-rows{min-height:320px;}
+  .sc-row{
+    animation:sc-fade .3s ease;
+    grid-template-columns:70px 1fr auto;
+    font-size:0.88rem;
+  }
+  .sc-row .r{font-size:0.76rem;}
+  @keyframes sc-fade{
+    from{opacity:0;transform:translateY(3px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  /* ---------- STATS ---------- */
+  .stats{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:36px 0;
+  }
+  .stats .wrap{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+  }
+  .stat h3{
+    font-size:2.4rem;color:var(--ink);
+    display:flex;align-items:baseline;gap:4px;
+  }
+  .stat h3 span{font-size:1.1rem;color:var(--gold);font-family:'JetBrains Mono',monospace;}
+  .stat p{font-size:0.85rem;color:var(--ink-soft);margin-top:4px;}
+
+  /* ---------- SECTION HEADINGS ---------- */
+  .sec-head{margin-bottom:48px;max-width:640px;}
+  .sec-head h2{font-size:clamp(1.8rem,3vw,2.4rem);margin-top:14px;}
+  .sec-head p{color:var(--ink-soft);margin-top:12px;font-size:1rem;}
+
+  /* ---------- ABOUT ---------- */
+  .about{padding:100px 0;}
+  .about-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;
+  }
+  .about-grid .value{
+    display:flex;gap:18px;padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .about-grid .value:last-child{border-bottom:1px solid var(--line);}
+  .value .num{
+    font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:0.85rem;padding-top:4px;
+  }
+  .value h4{font-size:1.05rem;margin-bottom:6px;}
+  .value p{font-size:0.92rem;color:var(--ink-soft);}
+
+  /* ---------- PROGRAMS ---------- */
+  .programs{padding:100px 0;background:var(--ink);color:var(--parchment);}
+  .programs .eyebrow{color:var(--gold-soft);}
+  .programs .eyebrow::before{background:var(--gold-soft);}
+  .programs .sec-head h2{color:var(--parchment);}
+  .programs .sec-head p{color:rgba(247,243,232,0.65);}
+  .prog-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:rgba(247,243,232,0.14);
+    border:1px solid rgba(247,243,232,0.14);
+  }
+  .prog-card{
+    background:var(--ink);padding:34px 28px;
+    transition:background .25s ease;
+  }
+  .prog-card:hover{background:var(--ink-soft);}
+  .prog-card .tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--gold-soft);
+    letter-spacing:0.08em;
+  }
+  .prog-card h3{color:var(--parchment);font-size:1.25rem;margin:14px 0 10px;font-weight:500;}
+  .prog-card p{font-size:0.88rem;color:rgba(247,243,232,0.6);}
+
+  /* ---------- NEWS ---------- */
+  .news{padding:100px 0;}
+  .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;}
+  .news-card article{border-top:1px solid var(--line);padding-top:20px;}
+  .news-card .date{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--sage);
+    margin-bottom:10px;display:block;
+  }
+  .news-card h4{font-size:1.15rem;margin-bottom:10px;}
+  .news-card p{font-size:0.9rem;color:var(--ink-soft);margin-bottom:14px;}
+  .news-card .read{font-size:0.82rem;font-weight:600;border-bottom:1.5px solid var(--gold);padding-bottom:2px;}
+
+  /* ---------- GALLERY ---------- */
+  .gallery{padding:0 0 100px;}
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:170px;gap:10px;
+  }
+  .gallery-grid div{
+    background:var(--parchment-dim);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--ink-soft);
+    text-align:center;padding:10px;
+  }
+  .gallery-grid div:nth-child(1){grid-column:span 2;grid-row:span 2;}
+  .gallery-grid div:nth-child(4){grid-row:span 2;}
+
+  /* ---------- TESTIMONIAL ---------- */
+  .quote-sec{padding:80px 0;background:var(--parchment-dim);}
+  .quote-sec blockquote{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.4rem,2.6vw,2rem);
+    max-width:820px;color:var(--ink);
+  }
+  .quote-sec cite{
+    display:block;margin-top:24px;font-style:normal;
+    font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:var(--sage);
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact{padding:100px 0;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;}
+  .info-row{
+    display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line);
+  }
+  .info-row:last-child{border-bottom:1px solid var(--line);}
+  .info-row .k{font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--gold);width:90px;flex-shrink:0;padding-top:2px;}
+  .info-row .v{font-size:0.95rem;}
+
+  form{display:flex;flex-direction:column;gap:18px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-size:0.78rem;font-family:'JetBrains Mono',monospace;color:var(--ink-soft);}
+  .field input,.field textarea{
+    background:transparent;
+    border:none;border-bottom:1px solid var(--line);
+    padding:10px 2px;font-family:'Inter',sans-serif;font-size:0.95rem;color:var(--ink);
+    outline:none;transition:border-color .2s ease;
+  }
+  .field input:focus,.field textarea:focus{border-color:var(--gold);}
+  .field textarea{resize:vertical;min-height:90px;}
+  .submit-btn{
+    align-self:flex-start;background:var(--ink);color:var(--parchment);
+    padding:13px 30px;font-weight:600;font-size:0.9rem;
+    border:1px solid var(--ink);border-radius:var(--radius);cursor:pointer;
+    transition:background .2s ease,color .2s ease;
+  }
+  .submit-btn:hover{background:transparent;color:var(--ink);}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink);color:rgba(247,243,232,0.65);
+    padding:60px 0 30px;
+  }
+  .foot-grid{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;
+    padding-bottom:40px;border-bottom:1px solid rgba(247,243,232,0.14);
+  }
+  .foot-grid h5{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+    color:var(--gold-soft);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;
+  }
+  .foot-grid ul{list-style:none;}
+  .foot-grid li{margin-bottom:10px;font-size:0.88rem;}
+  .foot-brand{font-family:'Fraunces',serif;font-style:italic;color:var(--parchment);font-size:1.1rem;margin-bottom:10px;}
+  .foot-bottom{
+    display:flex;justify-content:space-between;padding-top:24px;font-size:0.78rem;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* focus visibility */
+  a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--gold);outline-offset:2px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:920px){
+    nav ul{display:none;}
+    .menu-btn{display:block;}
+    .hero{padding-top:48px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .about-grid,.contact-grid{grid-template-columns:1fr;gap:36px;}
+    .stats .wrap{grid-template-columns:repeat(2,1fr);row-gap:28px;}
+    .prog-grid{grid-template-columns:1fr;}
+    .news-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .foot-grid{grid-template-columns:1fr 1fr;row-gap:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <div class="seal">ZM</div>
+      Zirvə Məktəbi
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#haqqimizda">Haqqımızda</a></li>
+        <li><a href="#proqramlar">Proqramlar</a></li>
+        <li><a href="#xeberler">Xəbərlər</a></li>
+        <li><a href="#qalereya">Qalereya</a></li>
+        <li><a href="#elaqe">Əlaqə</a></li>
+      </ul>
+    </nav>
+    <a href="#elaqe" class="nav-cta">Qeydiyyat</a>
+    <button class="menu-btn" aria-label="Menyu">☰</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">2026 — 2027-ci tədris ili</p>
+      <h1>Hər şagird üçün <em>öz zirvəsi</em> var. Biz yolu birgə gedirik.</h1>
+      <p>Zirvə Məktəbi Bakıda I–XI siniflər üzrə təhsil verən, tədqiqata əsaslanan tədris metodları ilə tanınan ümumtəhsil məktəbidir. Hər uşağın güclü tərəfini tapır, onun üzərində qururuq.</p>
+      <div class="hero-actions">
+        <a href="#elaqe" class="btn-primary">Sənəd qəbuluna müraciət et</a>
+        <a href="#haqqimizda" class="btn-ghost">Məktəb haqqında →</a>
+      </div>
+    </div>
+    <div class="schedule-card">
+      <div class="sc-head">
+        <span>Dərs cədvəli</span>
+        <span id="sc-grade-label">VII sinif</span>
+      </div>
+      <p class="sc-label">Sinif</p>
+      <div class="sc-picker" role="tablist" aria-label="Sinif seçin" id="sc-picker"></div>
+      <p class="sc-label">Həftənin günü</p>
+      <div class="sc-daypicker" role="tablist" aria-label="Gün seçin" id="sc-daypicker"></div>
+      <div class="sc-rows" id="sc-rows"></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><h3>860<span>+</span></h3><p>Aktiv şagird</p></div>
+    <div class="stat"><h3>74</h3><p>Müəllim heyəti</p></div>
+    <div class="stat"><h3>18</h3><p>İl təcrübə</p></div>
+    <div class="stat"><h3>96<span>%</span></h3><p>Ali məktəbə qəbul göstəricisi</p></div>
+  </div>
+</section>
+
+<section class="about" id="haqqimizda">
+  <div class="wrap about-grid">
+    <div>
+      <p class="eyebrow">Haqqımızda</p>
+      <h2 class="sec-head" style="margin-bottom:0;">Təlim proqramımızın əsasında üç prinsip dayanır</h2>
+      <p style="color:var(--ink-soft);margin-top:14px;max-width:460px;">2008-ci ildən fəaliyyət göstəririk. Missiyamız — hər şagirdə həm akademik biliyi, həm də müstəqil düşünmə bacarığını qazandırmaqdır.</p>
+    </div>
+    <div>
+      <div class="value">
+        <span class="num">01</span>
+        <div><h4>Kiçik sinif kollektivləri</h4><p>Hər sinifdə maksimum 20 şagird — müəllim hər uşağa fərdi diqqət ayıra bilir.</p></div>
+      </div>
+      <div class="value">
+        <span class="num">02</span>
+        <div><h4>Tədqiqata əsaslanan tədris</h4><p>Şagirdlər mövzuları əzbərləmək yerinə layihələr, təcrübələr və müzakirələr vasitəsilə öyrənirlər.</p></div>
+      </div>
+      <div class="value">
+        <span class="num">03</span>
+        <div><h4>İkidilli mühit</h4><p>Azərbaycan və ingilis dillərində tədris olunan fənlərin nisbəti V sinifdən etibarən bərabərləşir.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="programs" id="proqramlar">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Proqramlar</p>
+      <h2>İbtidai sinifdən buraxılışa qədər ardıcıl yol</h2>
+      <p>Hər pillə özündən əvvəlkinin üzərində qurulur — fənn seçimi yaşdan və maraqdan asılı olaraq genişlənir.</p>
+    </div>
+    <div class="prog-grid">
+      <div class="prog-card">
+        <span class="tag">I–IV SİNİF</span>
+        <h3>İbtidai təhsil</h3>
+        <p>Oxu, yazı və riyazi düşüncənin əsasları; oyun və layihə əsaslı dərslər vasitəsilə formalaşır.</p>
+      </div>
+      <div class="prog-card">
+        <span class="tag">V–IX SİNİF</span>
+        <h3>Orta təhsil</h3>
+        <p>Təbiət və dəqiq elmlər, dillər və sənət fənləri paralel aparılır; şagird ixtisaslaşmaya hazırlaşır.</p>
+      </div>
+      <div class="prog-card">
+        <span class="tag">X–XI SİNİF</span>
+        <h3>Yuxarı buraxılış pilləsi</h3>
+        <p>Elmi-təbiət və humanitar-ictimai istiqamətlər üzrə dərinləşdirilmiş fənn bloku, universitetə hazırlıq.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="news" id="xeberler">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Elanlar</p>
+      <h2>Son xəbərlər</h2>
+    </div>
+    <div class="news-grid">
+      <div class="news-card">
+        <article>
+          <span class="date">28 iyun 2026</span>
+          <h4>Yeni tədris ili üçün sənəd qəbulu başladı</h4>
+          <p>I sinif və köçürmə yerləri üçün ərizələr 15 avqusta qədər qəbul edilir.</p>
+          <a href="#elaqe" class="read">Ətraflı →</a>
+        </article>
+      </div>
+      <div class="news-card">
+        <article>
+          <span class="date">14 iyun 2026</span>
+          <h4>Şagirdlərimiz respublika riyaziyyat olimpiadasında</h4>
+          <p>IX sinif komandamız regional mərhələdə 2 qızıl, 1 gümüş medal qazandı.</p>
+          <a href="#elaqe" class="read">Ətraflı →</a>
+        </article>
+      </div>
+      <div class="news-card">
+        <article>
+          <span class="date">2 iyun 2026</span>
+          <h4>Yay düşərgəsi qeydiyyatı açıqdır</h4>
+          <p>İyul ayında keçiriləcək elm və incəsənət düşərgəsinə yerlər məhduddur.</p>
+          <a href="#elaqe" class="read">Ətraflı →</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="qalereya">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Qalereya</p>
+      <h2>Məktəb həyatından anlar</h2>
+    </div>
+    <div class="gallery-grid">
+      <div>Laboratoriya dərsi — şəkil yeri</div>
+      <div>Buraxılış mərasimi</div>
+      <div>İdman zalı</div>
+      <div>Kitabxana</div>
+      <div>Sənət emalatxanası</div>
+      <div>Həyət və oyun sahəsi</div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-sec">
+  <div class="wrap">
+    <blockquote>
+      "Bizim məqsədimiz şagirdə nə düşünəcəyini deyil, necə düşünəcəyini öyrətməkdir."
+      <cite>— Direktor müavini, tədris işləri üzrə</cite>
+    </blockquote>
+  </div>
+</section>
+
+<section class="contact" id="elaqe">
+  <div class="wrap contact-grid">
+    <div>
+      <p class="eyebrow">Əlaqə</p>
+      <h2 class="sec-head" style="margin-bottom:0;">Bizimlə əlaqə saxlayın</h2>
+      <div style="margin-top:24px;">
+        <div class="info-row"><span class="k">Ünvan</span><span class="v">Bakı ş., Nəsimi r., Zirvə küç. 12</span></div>
+        <div class="info-row"><span class="k">Telefon</span><span class="v">+994 12 345 67 89</span></div>
+        <div class="info-row"><span class="k">E-poçt</span><span class="v">info@zirvemektebi.az</span></div>
+        <div class="info-row"><span class="k">İş saatları</span><span class="v">B.e – Cümə, 08:30 – 17:00</span></div>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault(); this.querySelector('.submit-btn').textContent='Göndərildi ✓';">
+      <div class="field">
+        <label for="name">Ad Soyad</label>
+        <input id="name" type="text" placeholder="Adınızı yazın" required>
+      </div>
+      <div class="field">
+        <label for="email">E-poçt</label>
+        <input id="email" type="email" placeholder="siz@nümunə.az" required>
+      </div>
+      <div class="field">
+        <label for="msg">Mesaj</label>
+        <textarea id="msg" placeholder="Sualınızı və ya müraciətinizi yazın"></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Mesajı göndər</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Zirvə Məktəbi</div>
+        <p style="font-size:0.85rem;max-width:260px;">Bakıda 2008-ci ildən fəaliyyət göstərən I–XI sinif ümumtəhsil məktəbi.</p>
+      </div>
+      <div>
+        <h5>Naviqasiya</h5>
+        <ul>
+          <li><a href="#haqqimizda">Haqqımızda</a></li>
+          <li><a href="#proqramlar">Proqramlar</a></li>
+          <li><a href="#xeberler">Xəbərlər</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Resurslar</h5>
+        <ul>
+          <li><a href="#">Qəbul qaydaları</a></li>
+          <li><a href="#">Tədris planı</a></li>
+          <li><a href="#">Valideyn portalı</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Sosial şəbəkə</h5>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Zirvə Məktəbi</span>
+      <span>Bakı, Azərbaycan</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const roman = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI"];
+  const days  = ["Bazar ertəsi","Çərşənbə axşamı","Çərşənbə","Cümə axşamı","Cümə"];
+  const times = ["08:00","08:45","9:35","10:25","11:20","12:10","14:10"];
+
+  // Weekly subject pool per grade level (real AZ curriculum groupings).
+  // Each day's 7 lessons are drawn from this pool with a day-based offset,
+  // the way a real school timetable spreads subjects across the week.
+  const pools = {
+    1: ["Əlifba və oxu","Riyaziyyat","Həyat bilgisi","Musiqi","Bədən tərbiyəsi","Rəsm","Texnologiya","Ana dili","Sinif saatı"],
+    2: ["Ana dili","Riyaziyyat","Həyat bilgisi","İngilis dili","Təsviri incəsənət","Bədən tərbiyəsi","Musiqi","Texnologiya","Sinif saatı"],
+    3: ["Ana dili","Riyaziyyat","Təbiətşünaslıq","İngilis dili","Texnologiya","Bədən tərbiyəsi","Rəsm","Musiqi","Sinif saatı"],
+    4: ["Ana dili","Riyaziyyat","Təbiətşünaslıq","İngilis dili","Musiqi","Texnologiya","Bədən tərbiyəsi","Rəsm","Sinif saatı"],
+    5: ["Azərbaycan dili","Riyaziyyat","Təbiət","İngilis dili","Tarix","Bədən tərbiyəsi","Musiqi","Coğrafiya","İnformatika","Sinif saatı"],
+    6: ["Azərbaycan dili","Riyaziyyat","Biologiya","İngilis dili","Coğrafiya","Rus dili","Bədən tərbiyəsi","Tarix","İnformatika","Sinif saatı"],
+    7: ["Riyaziyyat","Azərbaycan dili","Fizika","İngilis dili","Rəssamlıq","Coğrafiya","Bədən tərbiyəsi","Biologiya","Rus dili","İnformatika","Sinif saatı"],
+    8: ["Riyaziyyat","Kimya","Fizika","Rus dili","İnformatika","Tarix","Bədən tərbiyəsi","Azərbaycan dili","İngilis dili","Coğrafiya","Sinif saatı"],
+    9: ["Riyaziyyat","Kimya","Fizika","Ədəbiyyat","İnformatika","Coğrafiya","Rus dili","Bədən tərbiyəsi","Tarix","İngilis dili","Sinif saatı"],
+    10:["Riyaziyyat (dərinləşdirilmiş)","Fizika","Xarici dil","İqtisadiyyat","Ədəbiyyat","Kimya","Tarix","Bədən tərbiyəsi","İnformatika","Coğrafiya","Sinif saatı"],
+    11:["Riyaziyyat (dərinləşdirilmiş)","Kimya","Xarici dil","Tarix","Buraxılış imtahanına hazırlıq","Fizika","Ədəbiyyat","Bədən tərbiyəsi","İqtisadiyyat","İnformatika","Sinif saatı"]
+  };
+
+  // Base classroom per grade; special subjects override with dedicated rooms.
+  const baseRoom = {1:"101",2:"102",3:"103",4:"104",5:"205",6:"206",7:"214",8:"215",9:"217",10:"301",11:"302"};
+
+  function roomFor(subject, grade){
+    if(/Fizika/.test(subject))            return "laboratoriya (fizika)";
+    if(/Kimya/.test(subject))             return "laboratoriya (kimya)";
+    if(/Biologiya|Təbiət/.test(subject))  return "laboratoriya (biologiya)";
+    if(/Bədən tərbiyəsi/.test(subject))   return "idman zalı";
+    if(/İnformatika/.test(subject))       return "kompüter otağı";
+    if(/Musiqi/.test(subject))            return "musiqi otağı";
+    if(/Rəsm|Rəssamlıq|incəsənət/.test(subject)) return "emalatxana";
+    if(/Texnologiya/.test(subject))       return "emalatxana";
+    return "otaq " + baseRoom[grade];
+  }
+
+  function scheduleFor(grade, dayIndex){
+    const pool = pools[grade];
+    const offset = (dayIndex * 2) % pool.length;
+    const lessons = [];
+    for(let i = 0; i < times.length; i++){
+      const subject = pool[(offset + i) % pool.length];
+      lessons.push([times[i], subject, roomFor(subject, grade)]);
+    }
+    return lessons;
+  }
+
+  const gradePicker = document.getElementById('sc-picker');
+  const dayPicker   = document.getElementById('sc-daypicker');
+  const rowsEl      = document.getElementById('sc-rows');
+  const label       = document.getElementById('sc-grade-label');
+
+  let currentGrade = 7;
+  let currentDay   = 0;
+
+  function render(){
+    rowsEl.innerHTML = scheduleFor(currentGrade, currentDay).map(([t,subj,room]) =>
+      `<div class="sc-row"><span class="t">${t}</span><span>${subj}</span><span class="r">${room}</span></div>`
+    ).join('');
+    label.textContent = roman[currentGrade] + " sinif · " + days[currentDay];
+  }
+
+  function selectGrade(grade){
+    currentGrade = grade;
+    [...gradePicker.children].forEach(btn =>
+      btn.setAttribute('aria-selected', btn.dataset.grade == grade ? 'true' : 'false'));
+    render();
+  }
+
+  function selectDay(dayIndex){
+    currentDay = dayIndex;
+    [...dayPicker.children].forEach(btn =>
+      btn.setAttribute('aria-selected', btn.dataset.day == dayIndex ? 'true' : 'false'));
+    render();
+  }
+
+  for(let g = 1; g <= 11; g++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sc-chip';
+    btn.textContent = g;
+    btn.dataset.grade = g;
+    btn.setAttribute('role','tab');
+    btn.setAttribute('aria-selected', g === currentGrade ? 'true' : 'false');
+    btn.addEventListener('click', () => selectGrade(g));
+    gradePicker.appendChild(btn);
+  }
+
+  days.forEach((dayName, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sc-day';
+    btn.textContent = dayName;
+    btn.dataset.day = i;
+    btn.setAttribute('role','tab');
+    btn.setAttribute('aria-selected', i === currentDay ? 'true' : 'false');
+    btn.addEventListener('click', () => selectDay(i));
+    dayPicker.appendChild(btn);
+  });
+
+  render();
+</script>
+
+</body>
+</html>
